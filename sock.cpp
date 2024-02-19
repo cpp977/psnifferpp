@@ -129,6 +129,9 @@ int main(int argc, char *argv[]) {
   for (const auto &f : ether_type_filter_vec) {
     ether_type_filter.insert(eth_types.at(f));
   }
+  if (ether_type_filter.empty()) {
+    ether_type_filter.insert(ETH_P_ALL);
+  }
 
   auto recv_interface = args.get<std::string>("i");
   auto interface = recv_interface.value_or("lo");
