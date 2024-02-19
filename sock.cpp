@@ -190,7 +190,9 @@ int main(int argc, char *argv[]) {
           std::format_to(std::back_inserter(eth_hdr_string),
                          "    type={0} ({0:04X})\n", ntohs(ether_type));
           if (interface == "tun0") {
-            ether_type = htons(ETH_P_IPV6);
+            const iphdr *ip =
+                reinterpret_cast<const iphdr *>(msg.data() + ETH_HDR_SIZE);
+            ether_type = ip->version == 4 ? htons(ETH_P_IP) : htons(ETH_P_IPV6);
           }
           switch (ntohs(ether_type)) {
           case ETH_P_IP: {
